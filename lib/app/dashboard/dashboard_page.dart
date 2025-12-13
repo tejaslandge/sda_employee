@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../profile/employee_profile_page.dart';
+import '../pages/leads/leads_page.dart';
+import '../pages/clients/client_list_page.dart';
 
 class EmployeeDashboardPage extends StatefulWidget {
   final int employeeId;
@@ -50,8 +52,11 @@ class _EmployeeDashboardPageState extends State<EmployeeDashboardPage> {
       },
       child: Scaffold(
         backgroundColor: const Color(0xfff8fafc),
-        // keep an empty appbar presence (no visible toolbar)
-        appBar: AppBar(backgroundColor: primary, elevation: 0, toolbarHeight: 0),
+        appBar: AppBar(
+          backgroundColor: primary,
+          elevation: 0,
+          toolbarHeight: 0,
+        ),
         body: screens[_currentIndex],
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: _currentIndex,
@@ -59,14 +64,21 @@ class _EmployeeDashboardPageState extends State<EmployeeDashboardPage> {
           unselectedItemColor: Colors.grey,
           onTap: (index) => setState(() => _currentIndex = index),
           items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.dashboard_customize_outlined), label: "Dashboard"),
-            BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: "Profile"),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.dashboard_customize_outlined),
+              label: "Dashboard",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person_outline),
+              label: "Profile",
+            ),
           ],
         ),
       ),
     );
   }
 
+  // --------------------- DASHBOARD UI ---------------------
   Widget _dashboardUI(Color primary) {
     return SingleChildScrollView(
       child: Column(
@@ -74,45 +86,138 @@ class _EmployeeDashboardPageState extends State<EmployeeDashboardPage> {
           Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 22),
-            decoration: BoxDecoration(color: primary, borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(40), bottomRight: Radius.circular(40))),
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text("Welcome 👋", style: TextStyle(color: Colors.white.withOpacity(.9), fontSize: 16)),
-              const SizedBox(height: 6),
-              Text(widget.employeeName, style: const TextStyle(color: Colors.white, fontSize: 26, fontWeight: FontWeight.bold)),
-            ]),
-          ),
-          const SizedBox(height: 30),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: GridView(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisExtent: 150, crossAxisSpacing: 18, mainAxisSpacing: 18),
+            decoration: BoxDecoration(
+              color: primary,
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(40),
+                bottomRight: Radius.circular(40),
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _menuCard(icon: Icons.timer_outlined, title: "Attendance", color: primary),
-                _menuCard(icon: Icons.assignment_outlined, title: "Tasks", color: Colors.teal),
-                _menuCard(icon: Icons.calendar_month_outlined, title: "Leave Request", color: Colors.orange),
-                _menuCard(icon: Icons.bar_chart_outlined, title: "Reports", color: Colors.blue),
+                Text(
+                  "Welcome 👋",
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(.9),
+                    fontSize: 16,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  widget.employeeName,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 26,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ],
             ),
           ),
+
+          const SizedBox(height: 30),
+
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              children: [
+                _menuRow(
+                  icon: Icons.timer_outlined,
+                  title: "Attendance",
+                  color: Colors.indigo,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const LeadsPage()),
+                    );
+                  },
+                ),
+                _menuRow(
+                  icon: Icons.leaderboard_outlined,
+                  title: "Leads",
+                  color: Colors.teal,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const LeadsPage()),
+                    );
+                  },
+                ),
+                _menuRow(
+                  icon: Icons.groups_outlined,
+                  title: "My Clients",
+                  color: Colors.orange,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const ClientListPage()),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+
           const SizedBox(height: 30),
         ],
       ),
     );
   }
 
-  Widget _menuCard({required IconData icon, required String title, required Color color}) {
-    return Container(
-      decoration: BoxDecoration(color: color.withOpacity(.12), borderRadius: BorderRadius.circular(16), boxShadow: [BoxShadow(color: Colors.black.withOpacity(.06), blurRadius: 12, offset: const Offset(0, 5))]),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(16),
-        onTap: () {},
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Icon(icon, size: 40, color: color),
-          const SizedBox(height: 10),
-          Text(title, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: color)),
-        ]),
+  // --------------------- SINGLE ROW MENU ---------------------
+  Widget _menuRow({
+    required IconData icon,
+    required String title,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(14),
+      child: Container(
+        width: double.infinity,
+        margin: const EdgeInsets.only(bottom: 16),
+        padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(14),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(.05),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: color.withOpacity(.15),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(icon, size: 28, color: color),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
+                ),
+              ),
+            ),
+            Icon(
+              Icons.arrow_forward_ios,
+              size: 18,
+              color: Colors.grey.shade500,
+            ),
+          ],
+        ),
       ),
     );
   }

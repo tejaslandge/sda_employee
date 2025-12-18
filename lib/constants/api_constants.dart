@@ -17,6 +17,13 @@ class ApiConstants {
   static const String leadsCreate = "$baseUrl/api/createlead";
   static const String clients = "$baseUrl/api/clients";
 
+  // Client Ads
+  static const String clientAds = "$baseUrl/api/clients";
+  // usage: /clients/{clientId}/ads
+
+  // Upload Ad
+  static const String uploadAd = "$baseUrl/api/ads";
+
   // ---------------- FOLLOW UPS ----------------
   static const String addFollowUp = "$baseUrl/api/lead-followups";
   static const String getFollowUps = "$baseUrl/api/lead-followups";

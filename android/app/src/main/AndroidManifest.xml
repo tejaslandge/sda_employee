@@ -16,19 +16,21 @@
     <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
 
     <!-- Legacy read/write (Android 10 and below only) -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> -->
 
 
     <!-- Phone and SMS permissions for direct calls and messages -->
-    <uses-permission android:name="android.permission.CALL_PHONE"/>
-    <uses-permission android:name="android.permission.SEND_SMS"/>
+    <!-- <uses-permission android:name="android.permission.CALL_PHONE" /> -->
+    <!-- <uses-permission android:name="android.permission.SEND_SMS" /> -->
 
     <!-- ========= APPLICATION ========= -->
     <application
         android:label="SDA Employee"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:usesCleartextTraffic="true"
+        android:networkSecurityConfig="@xml/network_security_config">
 
         <activity
             android:name=".MainActivity"
